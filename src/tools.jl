@@ -15,7 +15,7 @@ using TensorKit:
     spacetype,
     truncbelow,
     truncdim
-using MPSKit: leading_boundary
+using MPSKit: correlation_length, expectation_value, leading_boundary
 using MPSKitModels: S_exchange
 using PEPSKit:
     CTMRGEnv,
