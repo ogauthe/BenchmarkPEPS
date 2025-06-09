@@ -1,0 +1,13 @@
+{
+    "J2": 0.30,
+    "Dmax":4,
+    "beta_values":[0.1, 0.2],
+    "chi":16,
+    "ctm_cutoff":1.0e-10,
+    "ctm_maxiter":5,
+    "ctm_tol":1.0e-9,
+    "dt":0.001,
+    "su_cutoff":1.0e-10,
+    "symmetry":"SU2",
+    "rad":"data_obs_J1-J2"
+}
