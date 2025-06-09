@@ -28,7 +28,7 @@ using PEPSKit: InfinitePEPS, SimpleUpdate, simpleupdate
 using BenchmarkPEPS:
     compute_obs,
     init_env,
-    init_sim_1stnei,
+    init_heisenberg,
     pprint_corners,
     pprint_diag,
     pprint_vec,
@@ -51,7 +51,8 @@ flush(stdout)
 
 if length(ARGS) < 1
     println("Missing input file: use default")
-    json_input = String(dirname(@__FILE__)) * "/../input_sample/input_sample_heisenberg.jl"
+    json_input =
+        String(dirname(@__FILE__)) * "/../input_sample/input_sample_heisenberg.json"
 else
     json_input = String(ARGS[1])
 end
@@ -135,7 +136,7 @@ flush(stdout)
     spec, _ = eigh(h)
     println("Bond Hamiltonian spectrum:")
     pprint_diag(spec)
-    wpeps, su_hamilt, bond_operators, diag_operators = init_sim_1stnei(h)
+    wpeps, su_hamilt, bond_operators, diag_operators = init_heisenberg(h)
     nrows, ncols = size(wpeps)
 end
 flush(stdout)

@@ -48,7 +48,7 @@ function operator_with_ancilla(h; va0=nothing)
     return h_pa
 end
 
-function init_sim_1stnei(h_bond)
+function init_heisenberg(h_bond; J2=nothing)
     nrows, ncols = 2, 2
     h_pa = operator_with_ancilla(h_bond)
     vd = first(domain(h_bond))
@@ -71,7 +71,13 @@ function init_sim_1stnei(h_bond)
     )
     wpeps0 = InfiniteWeightPEPS(vertices0, weights0)
 
-    terms = [CartesianIndex.(t) => h_pa for t in nearest_neighbours(lattice)]  # 1st order SU, 1st neighbor, acting on AB//BA
+    terms = [CartesianIndex.(t) => h_pa for t in nearest_neighbours(lattice)]  # 1st order SU, 1st neighbor
+    if !isnothing(J2)   # 1st order SU, 2nd neighbor
+        append!(
+            terms,
+            [CartesianIndex.(t) => J2 * h_pa for t in next_nearest_neighbours(lattice)],
+        )
+    end
     su_hamilt = LocalOperator(physical_spaces, terms...)
 
     bond_operators = map(nearest_neighbours(lattice)) do inds
@@ -93,11 +99,11 @@ function init_env(ψ)
     return CTMRGEnv(corners, edges)
 end
 
-function converge_env(
-    S::Type{<:Sector}, D::Integer, boundary_alg; β=1.0, dt=5e-4, su_cutoff=1e-10
+function converge_heisenberg(
+    S::Type{<:Sector}, D::Integer, boundary_alg; β=1.0, dt=1e-3, su_cutoff=1e-10
 )
     h = S_exchange(Float64, S; spin=1//2)
-    wpeps0, su_hamilt, _, _ = init_sim_1stnei(h)
+    wpeps0, su_hamilt, _, _ = init_heisenberg(h)
     su_alg = SimpleUpdate(
         dt, -Inf, Int(round(β / 2dt)), truncdim(D) & truncbelow(su_cutoff)
     )
