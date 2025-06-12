@@ -21,6 +21,7 @@ function pprint_diag(spec::AbstractTensorMap)
     map(blocksectors(spec)) do s
         println("$s => ", pprint_vec(diag(block(spec, s))))
     end
+    return nothing
 end
 
 function pprint_weights(wpeps::InfiniteWeightPEPS)
@@ -31,6 +32,7 @@ function pprint_weights(wpeps::InfiniteWeightPEPS)
         wn = sum(sum(block(w, s)) * dim(s) for s in blocksectors(w))
         pprint_diag(w / wn)
     end
+    return nothing
 end
 
 function pprint_corners(env::CTMRGEnv)

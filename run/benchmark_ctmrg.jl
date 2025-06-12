@@ -8,6 +8,7 @@ using TensorKit:
     SU2Irrep,
     TensorMap,
     codomain,
+    dim,
     domain,
     permute,
     truncdim,
@@ -17,7 +18,11 @@ using MPSKit: leading_boundary
 using PEPSKit: PEPSKit, EnlargedCorner, InfiniteSquareNetwork, InfinitePEPS
 
 using BenchmarkPEPS:
-    contract_enlarged_corner, converge_env, pprint_tensormap, pprint_corners, pprint_weights
+    contract_enlarged_corner,
+    converge_heisenberg,
+    pprint_tensormap,
+    pprint_corners,
+    pprint_weights
 
 # Quality of life type piracy
 Base.size(t::AbstractTensorMap) = dim.(Tuple(codomain(t))), dim.(Tuple(domain(t)))
@@ -37,7 +42,7 @@ sector = SU2Irrep
 D = 4
 boundary_alg = (; tol=1e-7, trscheme=truncdim(D^2) & truncbelow(1e-12), maxiter=5);
 
-wpeps, env = converge_env(sector, D, boundary_alg)
+wpeps, env = converge_heisenberg(sector, D, boundary_alg)
 pprint_weights(wpeps)
 pprint_corners(env)
 
